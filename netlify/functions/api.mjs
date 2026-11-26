@@ -2,7 +2,7 @@
  * Netlify Function: /api/*   →  /.netlify/functions/api/:splat
  * 状态存在 Netlify Blobs（强一致读），无需外部数据库。
  */
-import { getBlobStore } from "./store.mjs";
+import { getBlobStore } from "../lib/store.mjs";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",

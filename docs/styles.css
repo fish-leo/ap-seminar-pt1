@@ -189,3 +189,7 @@ tbody tr:hover{background:#131b25}
   body{background:#fff;color:#111}
   .card{border-color:#ccc}
 }
+
+/* 隐藏 Netlify 右下角角标（官方开关在付费计划里，免费站可用这条覆盖） */
+#nl-badge-frame,
+iframe[title="Powered by Netlify"]{display:none!important}

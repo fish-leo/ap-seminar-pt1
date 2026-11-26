@@ -288,6 +288,18 @@ function wire(){
   $("#cancelLogin").addEventListener("click", ()=>$("#loginModal").classList.add("hidden"));
   $("#logoutBtn").addEventListener("click", logout);
 
+  $("#btnBackup").addEventListener("click", async ()=>{
+    try {
+      const data = await req("/api/backup");
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "ap-seminar-pt1-backup-" + new Date().toISOString().slice(0,10) + ".json";
+      link.click(); setTimeout(()=>URL.revokeObjectURL(link.href), 1500);
+      toast("已导出备份");
+    } catch(e){ toast("导出失败：" + e.message); }
+  });
+
   $("#saveTeam").addEventListener("click", async ()=>{
     await saveTeam({ topic: $("#topicInput").value.trim(), deadline: $("#deadlineInput").value, rq: state.team.rq || "" });
     $("#teamSaved").textContent = "已保存"; renderTimeline(); toast("已保存");

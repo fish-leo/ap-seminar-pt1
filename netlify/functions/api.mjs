@@ -53,10 +53,10 @@ async function readCurrent(store) {
     throw new StorageError("存储读取失败：" + (e && e.message ? e.message : e));
   }
   const val = r && (r.data !== undefined ? r.data : r.value);
-  if (val) return { state: Object.assign(blank(), val), etag: (r && r.etag) || null, fresh: false };
+  if (val) return { state: Object.assign(blank(), val), etag: (r && r.etag) || null, fresh: false, prev: val };
   const seeded = Object.assign(blank(), JSON.parse(JSON.stringify(SEED)));
   try { await store.setJSON("state", seeded, { onlyIfNew: true }); } catch (e) { /* 别处已创建，忽略 */ }
-  return { state: seeded, etag: null, fresh: true };
+  return { state: seeded, etag: null, fresh: true, prev: null };
 }
 
 const pub = m => ({ id: m.id, name: m.name, lens: m.lens, count: m.count, rq: m.rq, stage: m.stage, updated: m.updated });
@@ -199,6 +199,13 @@ async function handleApi(request) {
     });
   }
 
+  if (path === "/api/backup" && method === "GET") {
+    const { state } = await readCurrent(store);
+    let prev = null;
+    try { prev = await store.get("state.prev", { type: "json" }); } catch {}
+    return json({ ok: true, exportedAt: new Date().toISOString(), state, previous: prev });
+  }
+
   if (path === "/api/state" && method === "GET") {
     const { state } = await readCurrent(store);
     const viewer = token ? state.members.find(m => m.token === token) : null;
@@ -207,7 +214,7 @@ async function handleApi(request) {
 
   /* 其余接口：读 → 改 → 条件写，冲突重试 */
   for (let attempt = 0; attempt < 5; attempt++) {
-    const { state, etag, fresh } = await readCurrent(store);
+    const { state, etag, fresh, prev } = await readCurrent(store);
     const viewer = token ? state.members.find(m => m.token === token) : null;
     let dirty = false;
     let res = null;
@@ -325,6 +332,8 @@ async function handleApi(request) {
     if (!dirty) return res;
 
     try {
+      // 写前留一份上一版快照，误删可回滚
+      if (!fresh) { try { await store.set("state.prev", JSON.stringify(prev)); } catch {} }
       await store.setJSON("state", state, fresh ? { onlyIfNew: true } : { onlyIfMatch: etag });
       return res;
     } catch (e) {

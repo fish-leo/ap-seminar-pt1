@@ -10,13 +10,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# /api/* → Netlify Function（函数内部按 /api/ 之后的路由分发）
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
-  force = true
-
 [[headers]]
   for = "/*"
   [headers.values]

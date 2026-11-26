@@ -17,8 +17,20 @@ export async function getBlobStore() {
       console.warn("[store] Netlify Blobs unavailable:", e && e.message);
       kind = "memory";
       store = {
-        async get(key) { return mem[key] == null ? null : mem[key]; },
-        async setJSON(key, val) { mem[key] = JSON.parse(JSON.stringify(val)); }
+        async get(key, opts) {
+          const v = mem[key];
+          if (v == null) return null;
+          if (opts && opts.type === "json") return typeof v === "string" ? JSON.parse(v) : v;
+          if (opts && opts.type === "arrayBuffer") {
+            if (v instanceof ArrayBuffer) return v;
+            if (ArrayBuffer.isView(v)) return v.buffer;
+            return new TextEncoder().encode(String(v)).buffer;
+          }
+          return v;
+        },
+        async set(key, value) { mem[key] = value; },
+        async setJSON(key, val) { mem[key] = JSON.parse(JSON.stringify(val)); },
+        async delete(key) { delete mem[key]; }
       };
     }
   }

@@ -1,9 +1,14 @@
 [build]
   publish = "docs"
-  functions = "netlify/functions"
+  command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Netlify Functions（当前推荐写法）
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 # /api/* → Netlify Function（函数内部按 /api/ 之后的路由分发）
 [[redirects]]

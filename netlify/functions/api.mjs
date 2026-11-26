@@ -85,7 +85,7 @@ const SYSTEM = [
 async function aiCheck(text, step) {
   const env = (typeof Netlify !== "undefined" && Netlify.env) || { get: k => process.env[k] };
   const key = env.get("AI_API_KEY") || env.get("OPENAI_API_KEY");
-  const base = (env.get("AI_BASE_URL") || "https://api.openai.com/v1").replace(/\/+$/, "");
+  const base = (env.get("AI_BASE_URL") || env.get("OPENAI_BASE_URL") || "https://api.openai.com/v1").replace(/\/+$/, "");
   const model = env.get("AI_MODEL") || "gpt-4o-mini";
   if (!key) return { ok: false, needsSetup: true, error: "服务端未配置 AI_API_KEY（Netlify → Environment variables 添加后重新部署即可）" };
 
@@ -131,7 +131,9 @@ export default async function handler(request) {
     if (path === "/api/state" && method === "GET") return json({ ok: true, memory, ...snapshot(state, viewer) });
     if (path === "/api/ai-status" && method === "GET") {
       const env = (typeof Netlify !== "undefined" && Netlify.env) || { get: k => process.env[k] };
-      return json({ ok: true, configured: !!(env.get("AI_API_KEY") || env.get("OPENAI_API_KEY")), model: env.get("AI_MODEL") || "gpt-4o-mini" });
+      const b = env.get("AI_BASE_URL") || env.get("OPENAI_BASE_URL") || "https://api.openai.com/v1";
+      let host = b; try { host = new URL(b).host; } catch {}
+      return json({ ok: true, configured: !!(env.get("AI_API_KEY") || env.get("OPENAI_API_KEY")), baseHost: host, model: env.get("AI_MODEL") || "gpt-4o-mini" });
     }
 
     if (path === "/api/login" && method === "POST") {

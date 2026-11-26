@@ -35,7 +35,7 @@ async function boot(){
     state = Object.assign(blank(), res.state);
     state.me = res.me || null;
     if (!state.me && token) { token = ""; localStorage.removeItem(TOK_KEY); }
-    const st = $("#modeStatus"); st.textContent = "Cloudflare · 全员实时共享"; st.classList.add("on");
+    const st = $("#modeStatus"); st.textContent = "云端已连接 · 全员实时共享"; st.classList.add("on");
   } catch (err) {
     cloud = false;
     try { const raw = localStorage.getItem("apsem_local_v2"); if (raw) state = Object.assign(blank(), JSON.parse(raw)); } catch(e){}

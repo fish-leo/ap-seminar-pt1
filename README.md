@@ -1,60 +1,57 @@
 # AP Seminar PT1 团队工作台
 
-一个小组共用的项目推进站点：认领 lens、登记来源、按步骤推进、自评 IRR、彩排 TMP、准备答辩。
-运行在 Cloudflare Workers（静态资源 + 单个 Durable Object 存状态），**零第三方依赖**。
+一个小组共用的项目推进站点：全部步骤指引、lens 认领、来源池、IRR 自评、TMP 彩排、口头答辩准备。
+**线上地址：https://quiet-beijinho-315692.netlify.app**
 
-## 线上地址
+## 技术结构
 
-部署后由 wrangler 输出，形如 `https://ap-seminar-pt1.<你的子域>.workers.dev`。
+- 静态站点：`docs/`（纯 HTML/CSS/JS，无构建产物）
+- 后端：`netlify/functions/api.mjs`（Netlify Functions v2，路径 `/api/*`）
+- 存储：Netlify Blobs（`ap-seminar` store，单键 `state`，强一致读）
 
-## 部署 / 更新
+## 更新线上内容
 
 ```sh
-npx wrangler login        # 只需一次
-npx wrangler deploy       # 每次改完再跑
+git add -A && git commit -m "update" && git push origin main
 ```
 
-本地预览（不联网、不需要账号）：
+Netlify 会自动重新构建（Build command = `npm run build`，Publish = `docs`，Functions = `netlify/functions`）。
+
+## 本地预览
 
 ```sh
-npx wrangler dev --port 8788
+npm install
+node .ekko-tmp/test-api.mjs   # 或直接看 docs/index.html：会退回本地离线模式
 ```
 
 ## 账号系统
 
 - **只输名字**，第一次进入即注册；同名再进 = 登录本人。
-- 归一化规则：全角转半角、忽略大小写、忽略所有空格，所以 `Yu` / `yu ` / `ＹＵ` 是同一个人，不会重复建号。
-- 每次登录服务端签发 token，浏览器存在 `localStorage`，换设备用同一名字再进即可恢复。
-- **已知限制**：没有密码，理论上可冒用他名。课堂场景可接受；要更强保证需由老师分配名单 + 口令。
+- 归一化：全角转半角、忽略大小写、忽略所有空格，所以 `Yu` / `yu ` / `ＹＵ` 是同一个人。
+- 服务端签发 token，浏览器存 `localStorage`（键 `apsem_token_v2`），换设备用同一名字再进即可恢复。
+- **已知限制**：没有密码，理论上可冒用他名；课堂场景可接受。
 
-## 防重复的三道机制
+## 防重复机制
 
 | 对象 | 规则 |
 |---|---|
 | 成员 | 名字归一化后唯一，同名只更新自己那一行 |
-| lens | 一个 lens 只能被一人认领，被占时返回 409 并显示占用者 |
-| 来源 | 标题 + 年份做归一化指纹（忽略标点、大小写、空格），重复登记返回 409 |
+| lens | 一个 lens 只能一人认领，被占时 409 并返回占用者名字 |
+| 来源 | 标题 + 年份归一化指纹（忽略标点、大小写、空格），重复 409 |
 
-## 数据结构（Durable Object 内单个 `state` 键）
+## API
 
-```
-team{ topic, deadline, rq }
-members[{ id, name, slug, token, lens, count, rq, stage, progress{}, rubric{}, updated }]
-sources[{ id, auth, year, lens, title, type, grade, use, cred, by, updated }]
-fx[{ id, src, target, what, how, by }]
-```
-
-## 文件
-
-```
-worker.mjs        Worker 入口 + Durable Object（/api/login /api/state /api/member /api/source /api/fx /api/save /api/team）
-wrangler.toml     Worker 配置：assets 目录、DO 绑定与迁移
-site/
-  index.html      全部内容，一个 section 一个步骤
-  styles.css      主题与布局
-  theme-v2.css    登录弹窗、禁用态等增量样式
-  app.js          登录、表单、聚合看板、字数/自评计算、导出
-```
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/api/state` | 全量状态 + 当前用户（按 `x-token`） |
+| POST | `/api/login` | `{name}` → `{token, created, user, state}` |
+| POST | `/api/team` | 团队话题 / D-day / RQ 草稿 |
+| POST | `/api/member` | 认领或更新本人记录（lens 冲突 409） |
+| DELETE | `/api/member?id=` | 只能删自己 |
+| POST | `/api/source` | 登记来源（重复 409） |
+| DELETE | `/api/source?id=` | 只能删自己登记的 |
+| POST | `/api/fx` | 反证记录 |
+| POST | `/api/save` | 个人进度 / 自评分数 |
 
 ## 页面结构
 
@@ -72,7 +69,8 @@ site/
 | 8 口头答辩 | 10 题答题骨架、三句式 |
 | 9 协作 | 账号规则、导出、组内清单、个人进度 |
 
-## 说明
+## 备注
 
+- GitHub Pages 上的纯静态镜像：https://fish-leo.github.io/ap-seminar-pt1/ （无后端，只作备份演示用）
+- `worker.mjs` + `wrangler.toml` 是同一套逻辑的 Cloudflare Workers 版本，留作迁移备用。
 - 评分细则引文来自 2017-18 版官方 IRR Scoring Guidelines，分值以课程当年度版本为准。
-- 打印样式已适配：浏览器「打印 → 存为 PDF」会去掉侧栏。

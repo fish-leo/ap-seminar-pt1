@@ -6,6 +6,6 @@
     "build": "node -e \"console.log('static site: no build step needed')\""
   },
   "dependencies": {
-    "@netlify/blobs": "^8.1.0"
+    "@netlify/blobs": "^11.1.12"
   }
 }

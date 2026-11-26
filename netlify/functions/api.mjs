@@ -257,8 +257,11 @@ async function handleApi(request) {
       dirty = true; res = done({ ok: true, ...snapshot(state, viewer) });
 
     } else if (path === "/api/member" && method === "DELETE") {
-      if (url.searchParams.get("id") !== viewer.id) return done({ ok: false, error: "只能移除自己" }, 403);
-      state.members = state.members.filter(m => m.id !== viewer.id);
+      const target = state.members.find(m => m.id === url.searchParams.get("id"));
+      if (!target) return done({ ok: false, error: "找不到" }, 404);
+      const junk = !/[\p{L}\p{N}]/u.test(target.name);
+      if (target.id !== viewer.id && !junk) return done({ ok: false, error: "只能移除自己" }, 403);
+      state.members = state.members.filter(m => m.id !== target.id);
       dirty = true; res = done({ ok: true, ...snapshot(state, null) });
 
     } else if (path === "/api/source" && method === "POST") {

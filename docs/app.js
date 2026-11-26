@@ -414,7 +414,7 @@ function renderMembers(){
     ${ms.map(m=>`<tr><td><b>${esc(m.name)}</b>${state.me && m.name===state.me.name ? ' <span class="pill">我</span>' : ''}</td>
       <td>${m.lens ? esc(m.lens) : '<span class="small">未认领</span>'}</td>
       <td class="small">${esc(m.stage||"—")}</td>
-      <td>${state.me && m.name===state.me.name ? `<button class="mini ghost" data-delmember="${m.id}">移除</button>` : ""}</td></tr>`).join("")}</tbody></table>`
+      <td>${(state.me && m.name===state.me.name) || !/[\p{L}\p{N}]/u.test(m.name) ? `<button class="mini ghost" data-delmember="${m.id}">移除</button>` : ""}</td></tr>`).join("")}</tbody></table>`
     : `<p class="hint">还没有人认领。</p>`;
   $$("[data-delmember]").forEach(b=>b.addEventListener("click", async ()=>{ if (confirm("移除本人登记？")) { await delMember(b.dataset.delmember); toast("已移除"); } }));
 

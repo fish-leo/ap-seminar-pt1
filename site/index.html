@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AP Seminar PT1 团队工作台 · 社媒审美与身体形象</title>
+<link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="theme-v2.css"/>
+</head>
+<body>
+<div class="wrap">
+<aside>
+  <div class="brand">
+    <div class="dot">AP</div>
+    <div><b>Seminar PT1 工作台</b><small>Team Project · IRR · TMP</small></div>
+  </div>
+  <div class="who" id="whoBox">
+    <div class="who-empty" id="whoEmpty">
+      <button class="primary mini" id="openLogin">输入名字进入</button>
+      <div class="small" style="margin-top:6px">同名即同一人，不会重复登记</div>
+    </div>
+    <div class="who-in hidden" id="whoIn">
+      <div class="small">当前登录</div>
+      <b id="whoName">—</b>
+      <div class="row" style="margin-top:6px"><button class="mini ghost" id="logoutBtn">退出</button></div>
+    </div>
+  </div>
+  <nav id="nav">
+    <a href="#overview" data-s="overview"><span class="n">0</span>项目总览与时间线</a>
+    <a href="#tools" data-s="tools"><span class="n">✦</span>工具与链接</a>
+    <a href="#team" data-s="team"><span class="n">1</span>分工 & Lens 认领</a>
+    <div class="grp">研究阶段</div>
+    <a href="#recon" data-s="recon"><span class="n">2</span>Step 1 侦察检索</a>
+    <a href="#rq" data-s="rq"><span class="n">3</span>Step 2 RQ 收窄</a>
+    <a href="#falsify" data-s="falsify"><span class="n">4</span>Step 3 反证扫描</a>
+    <a href="#sources" data-s="sources"><span class="n">5</span>Step 4 来源池</a>
+    <div class="grp">交付物</div>
+    <a href="#irr" data-s="irr"><span class="n">6</span>Step 5 IRR 撰写</a>
+    <a href="#tmp" data-s="tmp"><span class="n">7</span>Step 6 TMP 演示</a>
+    <a href="#defense" data-s="defense"><span class="n">8</span>Step 7 口头答辩</a>
+    <div class="grp">协作</div>
+    <a href="#submit" data-s="submit"><span class="n">9</span>提交 · 统计 · 导出</a>
+  </nav>
+  <div style="margin-top:18px"><div class="status" id="modeStatus">连接中…</div></div>
+</aside>
+
+<main>
+<div class="toast" id="toast"></div>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="s-overview" class="on">
+  <div class="topbar">
+    <span class="crumb">PT1 · TEAM PROJECT</span>
+    <span class="tag acc">当前阶段：研究 → RQ 锁定</span>
+  </div>
+  <h1>先把「做什么」和「谁负责什么」钉死，再动手写字</h1>
+  <p class="lead">这是 Team Project 从今天到提交的完整路线图：<b>侦察 → RQ 收窄 → 反证 → 来源池 → IRR → TMP → 口头答辩</b>。每一步都写明产出物、负责人、以及「怎么判定这一步真的做完了」。编排依据是 AP Seminar 的评分逻辑：研究质量决定 Row 1–4 的上限，格式只决定 Row 5–6。</p>
+
+  <div class="card">
+    <h3>团队话题（题面级，可编辑并同步全员）</h3>
+    <p style="margin-top:2px"><b>当前 RQ 草稿 v1：</b></p>
+    <div class="copy"><button class="mini" data-copy="rqv1">复制</button><pre id="rqv1">To what extent does the spread of social media amplify harmful beauty standards and body dysmorphia among adolescent girls in China in the recent five years?</pre></div>
+    <div class="grid2" style="margin-top:14px">
+      <div>
+        <label class="f">团队话题（题面级）</label>
+        <input type="text" id="topicInput" placeholder="例：Social media, beauty standards and adolescent body image in China"/>
+      </div>
+      <div>
+        <label class="f">提交截止日 D-day（教师给定日期）</label>
+        <input type="date" id="deadlineInput"/>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="primary" id="saveTeam">保存并同步</button>
+      <span class="small" id="teamSaved"></span>
+    </div>
+  </div>
+
+  <div class="badbox">
+    <b>v1 的两处结构性风险（已用文献核实，不是风格问题）</b>
+    <ol style="margin-bottom:0">
+      <li><b>amplify（单方面放大）</b>：目前中国样本最硬的一条证据（Liu et al., 2025，两波交叉滞后、间隔 8 个月）发现是<b>双向</b>的——社媒使用预测 8 个月后的身体不满意，身体不满意也预测社媒使用。用 amplify 会让核心证据反过来削弱自己的措辞。</li>
+      <li><b>among adolescent girls</b>：该研究样本 <b>56.4% 是男生</b>，性别差异<b>不显著</b>（Δχ²(4)=5.58, p=.23），作者声明性别分析为探索性。要么把人群改为 adolescents，要么保留 girls 但必须论证「基线水平不同 ≠ 关联强度不同」。</li>
+    </ol>
+    <p style="margin-bottom:0" class="small">去 <a href="#rq">Step 2 RQ 收窄</a> 用检查表把它改成 v2。</p>
+  </div>
+
+  <h2>PT1 由什么组成</h2>
+  <table>
+    <thead><tr><th>组件</th><th>性质</th><th>规模</th><th>提交方式</th><th>顺序</th></tr></thead>
+    <tbody>
+      <tr><td><b>IRR</b><br>Individual Research Report</td><td>个人独立撰写；全组写同一个团队话题，每人一个 lens 切面</td><td>≤1200 词 + 参考文献页</td><td>每人一份，独立计分</td><td>研究后第一交付物</td></tr>
+      <tr><td><b>TMP</b><br>Team Multimedia Presentation</td><td>团队 8–10 分钟录像演示，提出一个团队方案或结论</td><td>8–10 min + 视频</td><td>全组一份</td><td>IRR 定稿之后</td></tr>
+      <tr><td><b>口头答辩</b><br>Oral Defense</td><td>成员分别回答追问，个人计分</td><td>2–4 问/人</td><td>现场或录音</td><td>录完 TMP 之后</td></tr>
+    </tbody>
+  </table>
+  <div class="warnbox"><b>纪律红线</b>：IRR 属独立写作，成员之间<b>不得共用句子、不得互改段落成文</b>。可以共享的是团队话题、RQ 边界、来源池、检索式与证据清单。任何 AI 输出都不构成来源，不得引用。</div>
+
+  <h2>时间线（相对 D-day 自动排）</h2>
+  <p class="small">填入截止日后自动换算为实际日期；未填时按相对天数阅读。</p>
+  <ul class="timeline" id="timeline"></ul>
+
+  <h2>开工先做三件事</h2>
+  <div class="grid3">
+    <div class="card tight"><b>① 认领 lens</b><p class="small" style="margin:6px 0 0">在 <a href="#team">Step 1</a> 登记：谁负责哪个 lens。两人抢同一个 lens 是 PT1 最常见的翻车点，系统会直接拦下重复认领。</p></div>
+    <div class="card tight"><b>② 锁定共用检索块</b><p class="small" style="margin:6px 0 0">全员必须使用同一组核心关键词，否则写的不是同一个话题。见 <a href="#recon">Step 1 检索卡</a>。</p></div>
+    <div class="card tight"><b>③ 16 篇来源起步</b><p class="small" style="margin:6px 0 0">全组 ≥16 篇、每人 ≥4 篇，其中 ≥1 篇同行评议实证研究。见 <a href="#sources">来源池</a>。</p></div>
+  </div>
+</section>
+
+<!-- ============ TOOLS ============ -->
+<section id="s-tools">
+  <div class="topbar"><span class="crumb">工具与链接</span><span class="tag acc">教师讲义指定</span></div>
+  <h1>三个工具，各自解决一个问题</h1>
+  <p class="lead">这三条链接来自课程讲义。它们不是「参考读物」，而是三个具体工序的工具：<b>查谬误 → 查引用格式 → 生成引用条目</b>。用错顺序（先收集再判断）是 Row 2 与 Row 3 掉档的常见原因。</p>
+
+  <div class="card">
+    <h3>1 · Your Logical Fallacy Is — 逻辑谬误识别</h3>
+    <p class="small" style="margin:6px 0"><a href="https://yourlogicalfallacyis.com/" target="_blank" rel="noopener">https://yourlogicalfallacyis.com/</a></p>
+    <p style="margin:10px 0 6px"><b>它是干什么的：</b>一张按名字索引的谬误图谱（straw man、false cause、appeal to authority、cherry picking 等），每条给出一句定义 + 一个生活化例句 + 一句话反制。</p>
+    <p style="margin:6px 0"><b>什么时候用：</b></p>
+    <ul class="small" style="margin-top:0">
+      <li>读到一篇论文或评论的结论「太顺」时，用它给对方的推理<b>命名</b>。评分要求的是评价 reasoning，而不是说「我觉得不可靠」。</li>
+      <li>写反证段时：给对方的漏洞命名，比自己重述一遍更有力。</li>
+      <li>自查：确认自己的因果句没有踩 false cause（这正是 amplify 这类单向动词最容易踩的坑）。</li>
+    </ul>
+    <div class="note" style="margin-bottom:0"><b>写法示例：</b><span class="mono">The argument commits false cause: the correlation between screen time and dissatisfaction is presented as单向因果, while the cited longitudinal study reports reciprocal effects.</span></div>
+  </div>
+
+  <div class="card">
+    <h3>2 · Purdue OWL — APA 格式权威参考</h3>
+    <p class="small" style="margin:6px 0"><a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/" target="_blank" rel="noopener">https://owl.purdue.edu/owl/research_and_citation/apa_style/</a></p>
+    <p style="margin:10px 0 6px"><b>它是干什么的：</b>普渡大学写作实验室维护的公开写作手册，APA 章节覆盖 in-text citation、References 条目、标题层级、表格与图表格式。大学写作课普遍用它作标准，比二手博客可靠。</p>
+    <p style="margin:6px 0"><b>什么时候用：</b></p>
+    <ul class="small" style="margin-top:0">
+      <li><b>Draft 2 开始前</b>先读一遍 in-text citation 与 References 两节，避免三稿阶段返工。</li>
+      <li>遇到特殊来源（政府文件、年报、期刊文章带 DOI、无作者网页）逐类查模板，不要凭记忆套。</li>
+      <li>Row 5 的判据是「accurately cites」+「consistent style」：格式全篇一致比格式完美更重要，先统一再逐条修。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>3 · Scribbr Citation Generator — 引用条目生成</h3>
+    <p class="small" style="margin:6px 0"><a href="https://www.scribbr.com/citation/generator/" target="_blank" rel="noopener">https://www.scribbr.com/citation/generator/</a></p>
+    <p style="margin:10px 0 6px"><b>它是干什么的：</b>输入 DOI、URL、ISBN 或标题，自动抓取元数据并生成 APA / MLA / Chicago 等格式的 References 条目与 in-text 引用。</p>
+    <p style="margin:6px 0"><b>什么时候用：</b></p>
+    <ul class="small" style="margin-top:0">
+      <li>每登记一条来源就顺手生成条目，存进来源池，避免最后两天补引用。</li>
+      <li><b>必须人工核对三处</b>：作者姓名顺序与大小写、年份、期刊卷期页码。自动抓取对中文期刊、政府文件、会议论文经常出错，而错误引用直接扣 Row 5。</li>
+      <li>不要用它替代 Purdue OWL 的校对：生成器给「初稿条目」，格式是否符合教师要求仍需按 OWL 核对。</li>
+    </ul>
+  </div>
+
+  <h2>推荐使用顺序</h2>
+  <ul class="timeline">
+    <li><span class="t">读文献时</span><b>Logical Fallacy Is</b><span class="small">给可疑推理命名，写进来源池的「可信度三句」，成为 Row 2 / Row 3 的落点。</span></li>
+    <li><span class="t">登记来源时</span><b>Scribbr</b><span class="small">生成条目 → 立刻手工核对作者/年份/卷期 → 存进来源池。</span></li>
+    <li><span class="t">Draft 2 之前</span><b>Purdue OWL</b><span class="small">先把 in-text 与 References 规则读一遍，把全篇格式一次统一，三稿只做内容。</span></li>
+  </ul>
+
+  <div class="warnbox"><b>一个常被忽略的限制</b>：引用格式正确不等于证据可信。三个工具里只有第一个和「评价来源」有关；Row 3 要的是 <b>credibility + relevance</b> 的判断，必须自己写（谁、什么资质、利益倾向、样本能代表谁）。</div>
+</section>
+
+<!-- ============ TEAM ============ -->
+<section id="s-team">
+  <div class="topbar"><span class="crumb">STEP 1 · 分工</span><span class="tag acc">每人 3 分钟</span></div>
+  <h1>Lens 认领表：一个 lens 只能一个人</h1>
+  <p class="lead">lens（学科视角，如 education / technology / history）是切入点，不等于 perspective。认领的唯一目的：<b>成员之间不打同一个洞，但打的是同一堵墙</b>。系统会拦截重复认领，并统计覆盖情况。</p>
+
+  <div class="card">
+    <h3>我要认领</h3>
+    <div class="grid2">
+      <div>
+        <label class="f">认领的 lens</label>
+        <select id="mLens">
+          <option value="">— 选择 —</option>
+          <option>Education 教育</option>
+          <option>Technology 技术</option>
+          <option>History 历史</option>
+          <option>Psychology 心理</option>
+          <option>Law 法律 / 政策</option>
+          <option>Economics 经济</option>
+          <option>Media 传播</option>
+        </select>
+        <label class="f">在这个 lens 下计划写的 perspective 数量</label>
+        <select id="mCount"><option>2</option><option selected>4</option><option>3</option></select>
+      </div>
+      <div>
+        <label class="f">本人的 RQ 草稿（可留空，之后补）</label>
+        <textarea id="mRq" placeholder="To what extent ..."></textarea>
+        <label class="f">当前进度</label>
+        <select id="mStage">
+          <option>0 · 还没开始</option>
+          <option>1 · 在读文献</option>
+          <option>2 · 有 RQ 草稿</option>
+          <option>3 · 来源够了</option>
+          <option>4 · 在写正文</option>
+          <option>5 · 定稿</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="primary" id="saveMember">提交 / 更新我的认领</button>
+      <span class="small">身份由登录名确定；同一个名字重复提交只会更新自己那一行</span>
+    </div>
+  </div>
+
+  <h2>全组看板</h2>
+  <div class="grid3">
+    <div class="card tight center"><div class="scorebig" id="statMembers">0</div><div class="small">已登记成员</div></div>
+    <div class="card tight center"><div class="scorebig" id="statLens">0</div><div class="small">覆盖 lens 数</div></div>
+    <div class="card tight center"><div class="scorebig" id="statSrc">0</div><div class="small">来源池总条数</div></div>
+  </div>
+  <div class="card">
+    <div id="memberTable"></div>
+    <div id="lensBars" style="margin-top:12px"></div>
+  </div>
+  <div class="okbox"><b>分工合格的三条判据</b>：① 每个 lens 恰好一人；② 每人的 RQ 都仍能被别人的 lens 反驳；③ 各 lens 合起来覆盖「问题存在 / 为什么现在 / 谁有责任 / 该怎么办」四种功能。<b>若两个 lens 都在证明「问题存在」，分工是错的。</b></div>
+</section>
+
+<!-- ============ RECON ============ -->
+<section id="s-recon">
+  <div class="topbar"><span class="crumb">STEP 1 · 侦察检索</span><span class="tag warn">2–3 小时，不读全文</span></div>
+  <h1>先做侦察，不要先写句子</h1>
+  <p class="lead">「先研究还是先定题」是假问题。真实顺序是：<b>团队粒度 → 侦察 → RQ → 反证 → 改 RQ</b>。侦察阶段只读四段：Abstract、Conclusion、Limitations、Practical Implications。任务是回答三个门槛问题，不是攒引用。</p>
+
+  <div class="card">
+    <h3>三道门槛</h3>
+    <table>
+      <thead><tr><th>门槛</th><th>问什么</th><th>不过怎么办</th></tr></thead>
+      <tbody>
+        <tr><td><b>G1 有实证吗</b></td><td>能否找到 ≥3 篇实证研究（有样本量、有测量工具、有效应量或统计量）？</td><td>只有新闻/博客 → 话题没有研究底子，换方向</td></tr>
+        <tr><td><b>G2 有四方吗</b></td><td>能否找到 ≥4 个有组织的主张者公开争论（协会、学会、部委、国际组织、智库、校方、平台方）？</td><td>找不到组织化主张 → 只有个人意见，撑不住 1200 词</td></tr>
+        <tr><td><b>G3 是价值冲突吗</b></td><td>分歧是否属于「优先级排序不同」（自由 vs 保护、家长权 vs 学校权、效率 vs 公平）？</td><td>只是事实争议 → 300 词就写完了，撑不到 4 个视角</td></tr>
+      </tbody>
+    </table>
+    <div class="small">G3 是多数稿子写崩的地方。判据：<b>用同一批证据，两队人能否得出相反结论？</b>能 → 价值冲突，可写；不能（例如「到底有没有关联」）→ 事实争议，写不长。</div>
+  </div>
+
+  <h2>共用检索块（全员一致）</h2>
+  <p class="small">教师讲义与常见错误：<code>+</code> 不是布尔运算符；五组条件全部 AND 会搜出 0 条。下面这段整段可复制。</p>
+  <div class="copy"><button class="mini" data-copy="kwCore">复制</button><pre id="kwCore">("social media" OR "short video" OR Douyin OR Xiaohongshu)
+AND ("body image" OR "body dissatisfaction" OR "appearance anxiety")
+AND (China OR Chinese)
+AND (adolescen* OR teen* OR student*)</pre></div>
+  <div class="warnbox"><b>搜出 0 条时的降级顺序（不要乱改词）</b>：① 先删 <code>AND (China OR Chinese)</code>，看国际上有什么证据 → ② 再删 lens 那一组，看领域总规模 → ③ 两组分开搜、自己拼起来。这是常规做法：一篇证明问题存在，一篇证明干预可能有效。</div>
+
+  <h2>Lens 检索卡</h2>
+  <p class="small">共用块 + 本人 lens 块，两段 AND 在一起使用。</p>
+  <div id="lensCards"></div>
+
+  <h2>侦察阶段交付物</h2>
+  <div class="card">
+    <div class="chk"><input type="checkbox" data-p="recon1"><span>8–10 篇候选文献的标题清单（不读全文）</span></div>
+    <div class="chk"><input type="checkbox" data-p="recon2"><span>每篇标注：实证 / 综述 / 政策文件 / 评论；样本国别；年份</span></div>
+    <div class="chk"><input type="checkbox" data-p="recon3"><span>G1/G2/G3 各写一句判定 + 理由</span></div>
+    <div class="chk"><input type="checkbox" data-p="recon4"><span>列出 4 个 perspective 的<b>主张者名称</b>（不是主张内容）</span></div>
+    <div class="chk"><input type="checkbox" data-p="recon5"><span>把可能反驳本组结论的 2 篇单独存档 → 交给 Step 3</span></div>
+  </div>
+</section>
+
+<!-- ============ RQ ============ -->
+<section id="s-rq">
+  <div class="topbar"><span class="crumb">STEP 2 · RQ 收窄</span><span class="tag acc">这一步决定 6 分还是 4 分</span></div>
+  <h1>RQ 体检器：八项全过才叫锁定</h1>
+  <p class="lead">RQ 是全文骨架。IRR 的 Row 1（Understand and Analyze Context）明确扣「overly broad or simplistic area of investigation」——RQ 太宽不会扣一点点，而是把该行直接压到 Low。下面八条是硬门槛。</p>
+
+  <div class="card">
+    <label class="f">当前 RQ</label>
+    <textarea id="rqText" placeholder="To what extent ..."></textarea>
+    <div id="rqChecks" style="margin-top:8px"></div>
+    <div class="row" style="margin-top:12px">
+      <div style="flex:1;min-width:180px"><div class="bar"><i id="rqBar"></i></div></div>
+      <span class="pill" id="rqScore">0 / 8</span>
+    </div>
+    <div id="rqVerdict" class="note" style="display:none"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>好 RQ 的四个机械特征</h3>
+      <ul>
+        <li><b>有可测的结果变量</b>：不是「影响」，而是身体不满意得分、课时数、退学率。</li>
+        <li><b>有边界人群</b>：不是 China，而是中国城市公立初中 12–15 岁学生。</li>
+        <li><b>有时间窗</b>：recent five years 要落到具体年份。</li>
+        <li><b>两边都有证据</b>：至少两方能用真实数据得出相反结论。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>To what extent ≠ 万能开头</h3>
+      <p class="small">该句型合法，但必须接一个<b>可量化或可排序</b>的宾语。写成「To what extent does social media affect X」仍然只是「有没有影响」，范围并未收敛。</p>
+      <p class="small"><b>结构示范（示例，不是给定话题）：</b>把「有没有影响」换成「两种手段谁更有效 / 到哪一步为止」。<span class="mono">To what extent can school-based media literacy curricula, compared with platform regulation, reduce appearance dissatisfaction among Chinese secondary students?</span></p>
+    </div>
+  </div>
+
+  <div class="warnbox"><b>全员一致规则</b>：各人 RQ 必须围绕<b>同一个结果变量</b>（例如 appearance dissatisfaction），但切面不同。<b>如果某人的 RQ 让别人那段变成废话，就是越界</b>，口头答辩时最容易被抓。</div>
+
+  <h2>本组 RQ v1 的三处硬伤（已用文献核实）</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>问题</th><th>证据</th><th>三个可选改法</th></tr></thead>
+      <tbody>
+        <tr><td><b>amplify</b> 单向动词</td><td>Liu et al. (2025)：两波交叉滞后（间隔 8 个月），双向均显著，社媒→身体不满意更强</td><td>① 换成 reciprocally reinforce ② 换成 interact with ③ 保留 amplify 但限定为「内容曝光强度」这一维度</td></tr>
+        <tr><td><b>adolescent girls</b> 人群前提</td><td>同研究样本 56.4% 为男生，性别差异不显著（p=.23，作者声明为探索性）</td><td>① 人群改 adolescents ② 保留 girls 但写「基线更高 ≠ 关联更强」 ③ 改按行为划分人群（外貌导向内容的重度消费者）</td></tr>
+        <tr><td><b>recent five years</b> 未落年份</td><td>覆盖 2022 疫情封锁期与 2023 放开期，混淆变量未讨论</td><td>① 写成 2020–2025 并明确讨论疫情 ② 研究窗口限定在校园场景 ③ 改问「短视频平台兴起之后」</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ FALSIFY ============ -->
+<section id="s-falsify">
+  <div class="topbar"><span class="crumb">STEP 3 · 反证扫描</span><span class="tag bad">最容易被跳过、最值钱</span></div>
+  <h1>去找能杀死这个 RQ 的证据，然后改 RQ</h1>
+  <p class="lead">反证不是用来「写一段 counterargument 交差」的。它的用途是<b>改 RQ</b>：找到强反证后应收窄或转向，而不是在正文里硬圆。Row 2 从 Medium 到 High 的差距，几乎全在这一步。</p>
+
+  <div class="card">
+    <h3>三类反证，按杀伤力排序</h3>
+    <ol>
+      <li><b>方向反证</b>：因果方向与假设相反（如双向而非单向）。</li>
+      <li><b>人群反证</b>：效应在指定人群中不成立（如性别无差异、东亚样本效应消失）。</li>
+      <li><b>干预反证</b>：主张的方案被评估证明无效或效应量极小（meta 分析 d≈0.08–0.20 是常态）。</li>
+    </ol>
+    <p class="small" style="margin-bottom:0">第三类最有价值：若主张「学校应做媒介素养课」而系统综述说效应量很小，不必放弃论点，而应把论点从「能显著改善」改成「是唯一可控且低成本的杠杆」。<b>会这样改写，就是 High。</b></p>
+  </div>
+
+  <div class="card">
+    <h3>反证记录</h3>
+    <div class="grid2">
+      <div><label class="f">反证来源（作者 年份 标题）</label><input type="text" id="fxSrc"/></div>
+      <div><label class="f">它反驳哪一句</label><input type="text" id="fxTarget" placeholder="例：amplify 所暗示的单向因果"/></div>
+    </div>
+    <label class="f">具体结论 / 数据</label>
+    <textarea id="fxWhat"></textarea>
+    <label class="f">处理方式</label>
+    <select id="fxHow"><option>改 RQ</option><option>加限定条件</option><option>部分让渡并收窄</option><option>用更强证据正面反驳</option></select>
+    <div class="row" style="margin-top:10px"><button class="primary" id="saveFx">记录这条反证</button></div>
+    <div id="fxList" style="margin-top:12px"></div>
+  </div>
+
+  <div class="okbox"><b>完成判据</b>：正文里至少有一句在「主动承认对方的强证据」，且<b>承认之后论点仍然成立</b>。只列举对方观点不算。<br><span class="small">句式：Although [strongest counter-evidence], the [claim] still holds because [reason the evidence does not cover the scope]. — 后半句必须是样本、机制或时间窗层面的差异，不能是「但我们认为」。</span></div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section id="s-sources">
+  <div class="topbar"><span class="crumb">STEP 4 · 来源池</span><span class="tag acc">全组共享，自动去重</span></div>
+  <h1>来源池：一条一条登记，不要建大文档</h1>
+  <p class="lead">Row 3（Evaluate Sources and Evidence）6 分档要求「evaluation of credibility of the sources <b>and</b> selection of relevant evidence」。光引用不够，必须当面评价来源。每条进来就顺手填三个字段，写正文时直接可用。</p>
+
+  <div class="card">
+    <div class="grid3">
+      <div><label class="f">作者 / 机构</label><input type="text" id="sAuth" placeholder="Liu et al. / 教育部"/></div>
+      <div><label class="f">年份</label><input type="number" id="sYear" placeholder="2025"/></div>
+      <div><label class="f">lens</label>
+        <select id="sLens"><option>Education</option><option>Technology</option><option>History</option><option>Psychology</option><option>Law</option><option>其他</option></select>
+      </div>
+    </div>
+    <label class="f">标题</label>
+    <input type="text" id="sTitle"/>
+    <div class="grid3">
+      <div><label class="f">来源类型</label>
+        <select id="sType">
+          <option>同行评议实证研究</option><option>系统综述 / meta 分析</option><option>官方政策文件 / 统计数据</option>
+          <option>学术专著 / 史料研究</option><option>智库 / 行业协会报告</option><option>媒体报道</option><option>其他</option>
+        </select>
+      </div>
+      <div><label class="f">证据等级</label>
+        <select id="sGrade"><option>强 · 直接支撑</option><option>中 · 间接支撑</option><option>弱 · 仅作背景</option><option>反证 · 反对本组结论</option></select>
+      </div>
+      <div><label class="f">用途</label>
+        <select id="sUse"><option>引言 / 背景</option><option>视角 1</option><option>视角 2</option><option>视角 3</option><option>视角 4</option><option>综合段</option><option>反证段</option><option>结论</option></select>
+      </div>
+    </div>
+    <label class="f">可信度三句（作者是谁 / 在该问题上有什么资质 / 可能有什么利益倾向）</label>
+    <textarea id="sCred" placeholder="例：作者为某高校心理学团队；采用两波纵向设计与标准化量表（MBSRQ），方法可信；但仅控制年龄与 BMI，未控制家庭 SES，性别比较为探索性。"></textarea>
+    <div class="row" style="margin-top:10px"><button class="primary" id="saveSrc">登记来源</button><span class="small" id="srcHint"></span></div>
+    <div class="small" style="margin-top:10px">写比较规范的条目可用 <a href="#tools">工具与链接</a> 里的 Purdue OWL（查规则）与 Scribbr（生成条目，需人工核对）。</div>
+  </div>
+
+  <div class="card">
+    <div class="spread"><h3 style="margin:0">来源池（共 <span id="srcTotal">0</span> 条）</h3>
+      <div class="row"><button class="mini ghost" id="exportCsv">导出 CSV</button></div></div>
+    <div id="srcTable" style="margin-top:8px"></div>
+    <div id="srcBars" style="margin-top:14px"></div>
+  </div>
+
+  <h2>把「可疑科学」变成可信度句</h2>
+  <p class="small">下列 12 条是检查表，不是教条——教育/政策研究大量是观察性研究，没有 RCT 不等于不可信。正确做法是按学科换问题。</p>
+  <div class="grid2">
+    <div class="card tight">
+      <h4>教育 / 社科应优先问的</h4>
+      <ul class="small" style="margin-bottom:0">
+        <li>效应量多大？（d / OR / 百分点，不是「显著」）</li>
+        <li>样本能代表谁？（几所学校、哪个地区、流失率）</li>
+        <li>控制了什么？<b>家庭 SES、先前成绩</b>是关键混淆变量</li>
+        <li>是否被独立重复？</li>
+        <li>测量工具是标准的还是自编的？</li>
+      </ul>
+    </div>
+    <div class="card tight">
+      <h4>通用 12 条（讲义清单）</h4>
+      <p class="small" style="margin-bottom:0">sensationalised headlines · misinterpreted results · conflicts of interest · correlation ≠ causation · unsupported conclusions · sample size · unrepresentative samples · no control group · no blind testing · selective reporting · unreplicable · non-peer-reviewed</p>
+    </div>
+  </div>
+  <div class="note"><b>正文模板（三句）</b>：<span class="mono">[Author] ([year]), a [position/institution], reports [finding] based on [design &amp; sample]; because [limitation], this evidence supports [narrow claim] but cannot establish [stronger claim].</span><br><span class="small">第三句即 credibility evaluation，是 Row 3 的给分点。</span></div>
+</section>
+
+<!-- ============ IRR ============ -->
+<section id="s-irr">
+  <div class="topbar"><span class="crumb">STEP 5 · IRR</span><span class="tag acc">≤1200 词</span></div>
+  <h1>IRR：先分配字数，再写句子</h1>
+  <p class="lead">1200 词摊到 4 个 perspective 加引言、综合、结论后非常紧。先算配额再动笔，否则写到第三个视角就没地方，最后只能砍证据——那正是 Row 2 / Row 4 掉档的原因。</p>
+
+  <div class="card">
+    <h3>字数分配器</h3>
+    <div class="grid3">
+      <div><label class="f">视角数</label><input type="number" id="wbP" value="4" min="2" max="6"/></div>
+      <div><label class="f">引言</label><input type="number" id="wbIntro" value="180"/></div>
+      <div><label class="f">综合段 synthesis</label><input type="number" id="wbSyn" value="130"/></div>
+      <div><label class="f">反证段</label><input type="number" id="wbCounter" value="100"/></div>
+      <div><label class="f">结论</label><input type="number" id="wbConcl" value="90"/></div>
+      <div><label class="f">总上限</label><input type="number" id="wbMax" value="1200"/></div>
+    </div>
+    <div id="wbOut" style="margin-top:14px"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>结构（依课程 IRR Outline）</h3>
+      <ol class="small">
+        <li><b>Cover page</b>：每页页眉 + 页码；RQ with Lens / 姓名 / 学校 / 字数</li>
+        <li><b>Introduction</b>：钩子 → 抛出 RQ 与 lens → 背景（为何此刻要研究）→ 语境与边界 → 论点（TH）</li>
+        <li><b>Body</b>：每段 = 视角主张 + claim → 证据（转述/摘要/引用）+ commentary → clincher 过渡句；建议 <b>3+ 视角、4–6 个 claim</b></li>
+        <li><b>Counter argument</b>：必须提出并<b>用证据</b>削弱对方（位置不限）</li>
+        <li><b>Conclusion</b>：重申 TH → 概括 → implications / solutions / consequences；<b>不得引入新信息或新来源</b></li>
+        <li><b>References</b>：APA，全部条目格式一致</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>三稿纪律</h3>
+      <ul class="small">
+        <li><b>Draft 1</b>：证据与推理写全，句子丑没关系，不许边写边润色。</li>
+        <li><b>Draft 2</b>：补归属（attribution）、可信度框架、过渡句。</li>
+        <li><b>Draft 3</b>：按评分细则逐行自评，只改扣分的行。</li>
+        <li class="small" style="color:var(--dim2)">每改完一稿跑一遍下方自评表，分数变化即进度条。</li>
+      </ul>
+      <div class="note" style="margin-bottom:0"><b>独立写作红线</b>：可以讨论论点，但不得共用句子、不得互改段落、不得把他人段落重写后当自己的。口头答辩会核对。</div>
+    </div>
+  </div>
+
+  <h2>自评：IRR 评分细则（30 分）</h2>
+  <p class="small">以下行文来自 <b>2017-18 版</b>官方 IRR Scoring Guidelines（4 行 × 6 分 + 2 行 × 3 分 = 30 分）。<b>不同年份分值可能调整</b>，请以课程当年度评分细则为准；行名与 High 档措辞基本稳定，可作自评锚点。</p>
+  <div id="rubricRows"></div>
+  <div class="card">
+    <div class="spread">
+      <div><span class="small">预估总分</span><div class="scorebig" id="rubricTotal">0</div><span class="small" id="rubricBand"></span></div>
+      <div style="flex:1;min-width:200px;padding-left:20px"><div class="bar"><i id="rubricBar"></i></div>
+      <div class="small" style="margin-top:8px">低于 18 分说明论证层（Row 2/3/4）有结构性问题，不是句子问题，先别润色。</div></div>
+    </div>
+  </div>
+
+  <h2>自查清单（每稿必跑）</h2>
+  <div class="card">
+    <div class="chk"><input type="checkbox" data-p="irr1"><span>页眉 + 页码 + 封面四项（RQ with Lens / 姓名 / 学校 / 字数）齐全</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr2"><span>引言有<b>研究边界</b>一句（不研究什么）</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr3"><span>每个视角段都有「证据 + commentary」配对，没有裸引用</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr4"><span>视角之间是<b>观点冲突</b>，不是四个子话题并列</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr5"><span>有独立综合段（converge / diverge / elevate）</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr6"><span>反证段承认最强反证，并说明论点为何仍成立</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr7"><span>每条关键来源首次出现时有三句可信度框架</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr8"><span>结论没有引入新来源</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr9"><span>in-text citation 与 References 一一对应，APA 全篇一致</span></div>
+    <div class="chk"><input type="checkbox" data-p="irr10"><span>字数 ≤1200（不含标题页与参考文献）</span></div>
+  </div>
+</section>
+
+<!-- ============ TMP ============ -->
+<section id="s-tmp">
+  <div class="topbar"><span class="crumb">STEP 6 · TMP</span><span class="tag acc">8–10 分钟</span></div>
+  <h1>团队演示：把四份研究拧成一个方案</h1>
+  <p class="lead">TMP 不是「每人轮流念自己的 IRR」。它要求团队提出<b>一个整体方案或结论</b>，并展示证据如何支撑它。评分看团队论证的连贯性，不看谁的口语好。</p>
+
+  <div class="badbox"><b>三种最常见的死法</b>：① 各讲各的部分，中间没有衔接句；② 八分钟全在讲「问题有多严重」，最后一分钟才说方案；③ 幻灯片是文字墙、照稿念。<b>推荐配比：问题 2 min、方案 4 min、证据与反驳 2.5 min、收束 1 min。</b></div>
+
+  <h2>八页骨架与分钟数</h2>
+  <table>
+    <thead><tr><th>#</th><th>幻灯片</th><th>必须有</th><th>时长</th><th>主讲</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>钩子</td><td>一个具体数字或真实场景（不要「今天我们来聊」）</td><td>0:40</td><td>任一成员</td></tr>
+      <tr><td>2</td><td>问题与范围</td><td>团队 RQ + 不研究什么</td><td>0:50</td><td>研究负责人</td></tr>
+      <tr><td>3</td><td>为什么现在</td><td>时间窗 + 近五年变化趋势</td><td>1:00</td><td>History / Technology</td></tr>
+      <tr><td>4</td><td>视角对撞</td><td>一张图：谁主张什么、冲突在哪一行</td><td>1:30</td><td>全体</td></tr>
+      <tr><td>5</td><td>团队方案</td><td>≤3 条具体措施，每条都有「谁做、做什么、怎么衡量」</td><td>2:00</td><td>Education lens</td></tr>
+      <tr><td>6</td><td>成本与反证</td><td>最强反对意见 + 回应</td><td>1:00</td><td>Law / Technology</td></tr>
+      <tr><td>7</td><td>落地路径</td><td>一学期或一学年内可执行的步骤</td><td>0:50</td><td>任一成员</td></tr>
+      <tr><td>8</td><td>结论与引用页</td><td>一句可复述的结论 + 完整来源</td><td>0:30</td><td>全组同框</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h3>录像与提交检查（录制前逐条打勾）</h3>
+    <div class="chk"><input type="checkbox" data-p="tmp1"><span>每位成员都在画面内出现过并说过话（个人计分要求）</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp2"><span>时长落在 8:00–10:00，掐表至少两次</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp3"><span>一镜到底或明显连续的剪辑，不用剪辑拼凑跳跃</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp4"><span>每页都有口头衔接句，没有硬切「下一页」</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp5"><span>幻灯片无整段文字；每页只讲一个主张</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp6"><span>所有引用来源列在最后一页，且与口头提及一致</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp7"><span>音频清楚（回放一遍再交，别最后才发现回声）</span></div>
+    <div class="chk"><input type="checkbox" data-p="tmp8"><span>提前至少 2 天完成首次全流程彩排，留 1 次修正</span></div>
+  </div>
+
+  <h2>三轮彩排</h2>
+  <div class="grid3">
+    <div class="card tight"><b>R1 结构轮</b><p class="small" style="margin:6px 0 0">不掐时间，只看逻辑：每页结束问「所以呢？」，答不出来就删这页。</p></div>
+    <div class="card tight"><b>R2 时间轮</b><p class="small" style="margin:6px 0 0">掐表，超时砍例子不砍论证。</p></div>
+    <div class="card tight"><b>R3 反问轮</b><p class="small" style="margin:6px 0 0">队内互相扮演评委问 10 个刁难问题，答不上来的补证据。</p></div>
+  </div>
+</section>
+
+<!-- ============ DEFENSE ============ -->
+<section id="s-defense">
+  <div class="topbar"><span class="crumb">STEP 7 · 口头答辩</span><span class="tag warn">个人计分</span></div>
+  <h1>答辩题不是随机的，可以从 RQ 与证据推出来</h1>
+  <p class="lead">常见追问集中在三类：「你怎么知道」「如果反过来呢」「为什么没考虑 X」。以下按本组当前 RQ 与证据列出最可能被问到的问题，并给出<b>答题骨架</b>——不是标准答案，答案必须由本人证据构成。</p>
+
+  <div id="defenseQs"></div>
+
+  <div class="card">
+    <h3>答题三句式（背下来）</h3>
+    <ol class="small">
+      <li><b>直接回答</b>一句话，不含「我觉得」。</li>
+      <li><b>证据锚点</b>：作者 + 年份 + 样本/设计 + 结论方向。</li>
+      <li><b>边界承认</b>：该证据不能说明什么，因此主张只到哪一步。</li>
+    </ol>
+    <div class="warnbox" style="margin-bottom:0">被问到不会的：<b>「这一块我目前的证据不足，我能说的是 __；如果要回答到那一步，我需要 __ 类型的数据。」</b>这句话本身加分，胡编直接失分。</div>
+  </div>
+
+  <div class="card">
+    <h3>个人准备（每人独立完成）</h3>
+    <div class="chk"><input type="checkbox" data-p="def1"><span>能 30 秒说清自己 RQ 的<b>边界</b>（不研究什么）</span></div>
+    <div class="chk"><input type="checkbox" data-p="def2"><span>能背出最强 2 条证据的样本量与设计类型</span></div>
+    <div class="chk"><input type="checkbox" data-p="def3"><span>能说出最强的一条反证，并解释论点为何仍成立</span></div>
+    <div class="chk"><input type="checkbox" data-p="def4"><span>能解释自己 lens 与组员 lens 的<b>冲突点在哪一行</b></span></div>
+    <div class="chk"><input type="checkbox" data-p="def5"><span>能说出团队方案的 1 个真实成本（人力/课时/公平性）</span></div>
+  </div>
+</section>
+
+<!-- ============ SUBMIT ============ -->
+<section id="s-submit">
+  <div class="topbar"><span class="crumb">协作 · 统计 · 导出</span><span class="tag ok">数据在你们手上</span></div>
+  <h1>账号、统计与导出</h1>
+  <p class="lead">登录只需输入名字，<b>同名即同一人</b>（大小写与空格自动归一），所以重复输入不会产生重复账号。数据存在 Cloudflare 上，全员实时共享；同一 lens 不能被两人认领，同一来源不能重复登记。</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>账号规则</h3>
+      <ul class="small">
+        <li>第一次输入名字 = 注册；之后再输同样的名字 = 登录本人。</li>
+        <li>名字归一化：去空格、忽略大小写、全角转半角，所以「Yu」「yu 」「ＹＵ」是同一个人。</li>
+        <li>每次提交都会记录到本人名下，看板上按人汇总。</li>
+        <li>换设备或清缓存后用同一名字再进，数据仍在。</li>
+      </ul>
+      <div class="warnbox" style="margin-bottom:0"><b>已知限制</b>：纯名字登录没有密码，理论上可以冒用他名。课堂场景可接受；如果担心，请让老师分配固定名单。</div>
+    </div>
+    <div class="card">
+      <h3>备用与导出</h3>
+      <ul class="small">
+        <li>导出全组 JSON：一次性备份全部记录。</li>
+        <li>导出 CSV：来源池可进 Excel 或表格工具。</li>
+        <li>打印样式已适配：用浏览器「打印 → 存为 PDF」可得到去掉侧栏的干净稿。</li>
+      </ul>
+      <div class="row" style="margin-top:8px">
+        <button class="primary" id="btnExport">导出全组 JSON</button>
+        <button id="exportCsv2" class="ghost">导出来源 CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <h2>组内推进清单（开会逐条过）</h2>
+  <div class="card">
+    <div class="chk"><input type="checkbox" data-p="team1"><span>团队话题一句话能全员复述一致</span></div>
+    <div class="chk"><input type="checkbox" data-p="team2"><span>每个 lens 恰好一人，系统无冲突提示</span></div>
+    <div class="chk"><input type="checkbox" data-p="team3"><span>各人 RQ 共用同一个结果变量</span></div>
+    <div class="chk"><input type="checkbox" data-p="team4"><span>共用检索块全员使用同一版</span></div>
+    <div class="chk"><input type="checkbox" data-p="team5"><span>来源池 ≥16 条且已去重</span></div>
+    <div class="chk"><input type="checkbox" data-p="team6"><span>反证已找到 2 条并回改了 RQ</span></div>
+    <div class="chk"><input type="checkbox" data-p="team7"><span>IRR 三稿跑完，自评 ≥24/30</span></div>
+    <div class="chk"><input type="checkbox" data-p="team8"><span>TMP 彩排 3 轮完成，时长落在 8–10 分钟</span></div>
+    <div class="chk"><input type="checkbox" data-p="team9"><span>每人答辩题自测完成</span></div>
+  </div>
+
+  <h2>我的进度</h2>
+  <div class="card">
+    <div class="bar" style="height:10px"><i id="globalBar"></i></div>
+    <div class="small" id="globalTxt" style="margin-top:8px"></div>
+  </div>
+
+  <div class="small" style="margin-top:30px;color:var(--dim2)">
+    依据：课程 IRR Outline、2017-18 AP Seminar IRR Scoring Guidelines、讲义所列工具（yourlogicalfallacyis.com / Purdue OWL APA / Scribbr Citation Generator）、Spotting Bad Science 清单，以及本组已确认的 RQ 与证据（Liu et al., 2025）。所有分值以课程当年度评分细则为准。
+  </div>
+</section>
+</main>
+</div>
+
+<!-- login modal -->
+<div class="modal hidden" id="loginModal">
+  <div class="modal-card">
+    <h2 style="margin-top:0;border:0;padding:0">输入名字进入</h2>
+    <p class="small">同名视为同一人，不会重复登记。请使用你在组内固定使用的名字。</p>
+    <label class="f">你的名字</label>
+    <input type="text" id="loginName" placeholder="例：Yu / Alex / 张三" autocomplete="off"/>
+    <div class="row" style="margin-top:14px">
+      <button class="primary" id="doLogin">进入</button>
+      <button class="ghost" id="cancelLogin">取消</button>
+    </div>
+    <div class="small" id="loginErr" style="color:var(--bad);margin-top:8px"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

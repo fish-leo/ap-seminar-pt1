@@ -134,7 +134,7 @@ async function handleApi(request) {
 
   // 请求体只读一次
   let body = {}, form = null, uploadFile = null;
-  if (method === "POST" || method === "DELETE") {
+  if (method === "POST" || method === "DELETE" || method === "PATCH") {
     if (ct.includes("multipart/form-data")) {
       form = await request.formData();
       uploadFile = form.get("file");
@@ -146,14 +146,25 @@ async function handleApi(request) {
   }
 
   // 上传的文件先落盘一次（唯一键，不参与 CAS）
-  let uploaded = null;
-  if (path === "/api/upload" && uploadFile && typeof uploadFile !== "string") {
+  let uploaded = null, uploadedPaper = null;
+  const hasFile = uploadFile && typeof uploadFile !== "string";
+  if ((path === "/api/upload" || path === "/api/paper") && hasFile) {
     const ext = (uploadFile.name.split(".").pop() || "").toLowerCase();
     if (!ALLOWED_EXT.includes(ext)) return json({ ok: false, error: "只支持 pdf / doc / docx / txt / md / 图片" }, 415);
     if (uploadFile.size > MAX_FILE) return json({ ok: false, error: "文件超过 3.5MB，请压缩或只传截图" }, 413);
     const id = crypto.randomUUID();
     try { await store.set("files/" + id, await uploadFile.arrayBuffer()); }
     catch (e) { return json({ ok: false, error: "文件写入失败：" + (e.message || "") }, 500); }
+    const paperFields = {
+      title: form.get("title"), auth: form.get("auth"), year: form.get("year"),
+      country: form.get("country"), sample: form.get("sample"), design: form.get("design"),
+      finding: form.get("finding"), lens: form.get("lens"), quota: form.get("quota"),
+      type: form.get("type"), grade: form.get("grade"), use: form.get("use"),
+      cred: form.get("cred"), url: form.get("url")
+    };
+    if (path === "/api/paper") {
+      uploadedPaper = { id, ...paperFields, filename: uploadFile.name, size: uploadFile.size, type: uploadFile.type || "" };
+    }
     uploaded = {
       id, step: String(form.get("step") || "irr").slice(0, 20),
       title: String(form.get("title") || "").slice(0, 160),
@@ -176,13 +187,14 @@ async function handleApi(request) {
   if (path === "/api/file" && method === "GET") {
     const id = url.searchParams.get("id");
     const { state } = await readCurrent(store);
-    const meta = (state.deliverables || []).find(d => d.id === id);
+    const meta = (state.deliverables || []).find(d => d.id === id)
+      || (state.sources || []).find(s => s.fileId === id);
     if (!meta) return json({ ok: false, error: "找不到文件" }, 404);
     const buf = await store.get("files/" + id, { type: "arrayBuffer" });
     if (!buf) return json({ ok: false, error: "文件已丢失" }, 404);
     return new Response(buf, {
       headers: {
-        "content-type": meta.type || "application/octet-stream",
+        "content-type": meta.mime || meta.type || "application/octet-stream",
         "content-disposition": `inline; filename*=UTF-8''${encodeURIComponent(meta.filename || "file")}`,
         "cache-control": "private, max-age=60"
       }
@@ -264,27 +276,51 @@ async function handleApi(request) {
       state.members = state.members.filter(m => m.id !== target.id);
       dirty = true; res = done({ ok: true, ...snapshot(state, null) });
 
-    } else if (path === "/api/source" && method === "POST") {
-      const title = String(body.title || "").trim();
+    } else if (path === "/api/paper" && method === "POST") {
+      const src = uploadedPaper || body;
+      const title = String(src.title || "").trim();
       if (!title) return done({ ok: false, error: "请填标题" }, 400);
-      if (state.sources.length >= 300) return done({ ok: false, error: "来源已达上限" }, 429);
-      const k = srcKey(title, body.year);
+      if (state.sources.length >= 400) return done({ ok: false, error: "文章池已达上限" }, 429);
+      const k = srcKey(title, src.year);
       const dupe = state.sources.find(s => srcKey(s.title, s.year) === k);
-      if (dupe) return done({ ok: false, error: "来源已存在", dupe: dupe.by, title: dupe.title }, 409);
+      if (dupe) return done({ ok: false, error: "这篇已在池子里", dupe: dupe.by, title: dupe.title }, 409);
       state.sources.push({
-        id: crypto.randomUUID(), auth: String(body.auth || "").slice(0, 120), year: String(body.year || "").slice(0, 8),
-        lens: String(body.lens || "").slice(0, 40), title: title.slice(0, 300), type: String(body.type || "").slice(0, 60),
-        grade: String(body.grade || "").slice(0, 60), use: String(body.use || "").slice(0, 40),
-        cred: String(body.cred || "").slice(0, 1200), by: viewer.name, updated: Date.now()
+        id: uploadedPaper ? uploadedPaper.id : crypto.randomUUID(),
+        by: viewer.name, byId: viewer.id,
+        title: title.slice(0, 300),
+        auth: String(src.auth || "").slice(0, 120), year: String(src.year || "").slice(0, 8),
+        country: String(src.country || "").slice(0, 60), sample: String(src.sample || "").slice(0, 60),
+        design: String(src.design || "").slice(0, 120), finding: String(src.finding || "").slice(0, 300),
+        lens: String(src.lens || "").slice(0, 40), quota: String(src.quota || "其他").slice(0, 20),
+        type: String(src.type || "同行评议实证研究").slice(0, 60),
+        grade: String(src.grade || "强 · 直接支撑").slice(0, 60), use: String(src.use || "引言 / 背景").slice(0, 40),
+        cred: String(src.cred || "").slice(0, 1200),
+        url: String(src.url || "").slice(0, 500),
+        fileId: uploadedPaper ? uploadedPaper.id : "", filename: uploadedPaper ? uploadedPaper.filename : "",
+        size: uploadedPaper ? uploadedPaper.size : 0, mime: uploadedPaper ? uploadedPaper.type : "",
+        updated: Date.now()
       });
       dirty = true; res = done({ ok: true, ...snapshot(state, viewer) });
 
-    } else if (path === "/api/source" && method === "DELETE") {
+    } else if (path === "/api/paper" && method === "PATCH") {
       const id = url.searchParams.get("id");
       const t = state.sources.find(s => s.id === id);
       if (!t) return done({ ok: false, error: "找不到" }, 404);
-      if (t.by !== viewer.name) return done({ ok: false, error: "只能删自己登记的" }, 403);
+      const owner = t.byId ? t.byId === viewer.id : t.by === viewer.name;
+      if (!owner) return done({ ok: false, error: "只有上传者本人能修改" }, 403);
+      const f = ["title","auth","year","country","sample","design","finding","lens","quota","type","grade","use","cred","url"];
+      for (const k of f) if (body[k] !== undefined) t[k] = String(body[k]).slice(0, k === "cred" ? 1200 : 300);
+      t.updated = Date.now();
+      dirty = true; res = done({ ok: true, ...snapshot(state, viewer) });
+
+    } else if (path === "/api/paper" && method === "DELETE") {
+      const id = url.searchParams.get("id");
+      const t = state.sources.find(s => s.id === id);
+      if (!t) return done({ ok: false, error: "找不到" }, 404);
+      const owner = t.byId ? t.byId === viewer.id : t.by === viewer.name;
+      if (!owner) return done({ ok: false, error: "只有上传者本人能删除" }, 403);
       state.sources = state.sources.filter(s => s.id !== id);
+      if (t.fileId) { try { await store.delete("files/" + t.fileId); } catch {} }
       dirty = true; res = done({ ok: true, ...snapshot(state, viewer) });
 
     } else if (path === "/api/fx" && method === "POST") {

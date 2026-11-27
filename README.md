@@ -55,12 +55,13 @@ Netlify → Project configuration → **Environment variables** → 添加：
 | POST | `/api/team` | 话题 / D-day / RQ |
 | POST | `/api/member` | 认领或更新本人（lens 冲突 409） |
 | DELETE | `/api/member?id=` | 只能删自己 |
-| POST | `/api/source` | 登记来源（重复 409） |
-| DELETE | `/api/source?id=` | 只能删自己登记的 |
+| POST | `/api/paper` | 上传文章（multipart 带文件或 JSON 带链接），重复 409 |
+| PATCH | `/api/paper?id=` | 只有上传者本人能改 |
+| DELETE | `/api/paper?id=` | 只有上传者本人能删（连带删除文件） |
 | POST | `/api/fx` | 反证记录 |
 | POST | `/api/save` | 个人进度 / 自评分 |
 | POST | `/api/upload` | multipart：`file` `step` `title` `note`，≤3.5MB |
-| GET | `/api/file?id=` | 下载附件（随机 id，可直接 `<a href>`） |
+| GET | `/api/file?id=` | 下载附件 / 文章 PDF（随机 id，可直接 `<a href>`） |
 | DELETE | `/api/upload?id=` | 只能删自己的 |
 | POST | `/api/check` | `{step, text, deliverableId?}` → AI 核查 |
 
@@ -68,6 +69,8 @@ Netlify → Project configuration → **Environment variables** → 添加：
 
 概览（仪表盘 + 时间线）· 1 分工 · 2 侦察 · 3 RQ · 4 反证 · 5 来源 · 6 IRR · 7 TMP · 8 答辩 · 工具与链接。
 每个步骤页底部都有同一个「交付与核查」面板：选文件 → 上传；贴关键段落 → AI 核查；下面列出该步骤全部上传（可下载、可查看历史核查）。
+
+**文章池（Step 5）**：每人 8 篇配额，全员可见；带文件或只贴链接都可；只有上传者本人能改 / 删；按人显示进度条，按配额类别（核心 / 元分析 / 中国本土 / 可行性 / 反证）显示覆盖度。
 
 ## 备注
 

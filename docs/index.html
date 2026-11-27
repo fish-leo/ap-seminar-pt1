@@ -21,7 +21,7 @@
     <a href="#recon" data-s="recon"><span class="n">2</span>侦察检索</a>
     <a href="#rq" data-s="rq"><span class="n">3</span>RQ 收窄</a>
     <a href="#falsify" data-s="falsify"><span class="n">4</span>反证扫描</a>
-    <a href="#sources" data-s="sources"><span class="n">5</span>来源池</a>
+    <a href="#sources" data-s="sources"><span class="n">5</span>文章池</a>
     <a href="#irr" data-s="irr"><span class="n">6</span>IRR 撰写</a>
     <a href="#tmp" data-s="tmp"><span class="n">7</span>TMP 演示</a>
     <a href="#defense" data-s="defense"><span class="n">8</span>口头答辩</a>
@@ -84,8 +84,7 @@
       <h3>认领</h3>
       <label class="f">Lens</label>
       <select id="mLens"><option value="">— 选择 —</option>
-        <option>Education 教育</option><option>Technology 技术</option><option>History 历史</option>
-        <option>Psychology 心理</option><option>Law 法律 / 政策</option><option>Economics 经济</option><option>Media 传播</option></select>
+        <option>Education</option><option>Technology</option><option>Psychology</option><option>Media</option><option>其他</option></select>
       <div class="row"><div style="flex:1"><label class="f">Perspective 数</label>
         <select id="mCount"><option>2</option><option selected>4</option><option>3</option></select></div>
         <div style="flex:1"><label class="f">进度</label>
@@ -113,40 +112,51 @@
 
 <!-- ========== 侦察 ========== -->
 <section id="s-recon">
-  <header class="step-head"><span class="chip">STEP 2</span><h1>侦察检索</h1>
-    <p class="goal">只读 Abstract / Conclusion / Limitations / Practical Implications，判断有没有研究底子。</p></header>
+  <header class="step-head"><span class="chip">STEP 2</span><h1>侦察与检索</h1>
+    <p class="goal">四人写同一话题、不同行动者；每人 8 篇，共用块一个字不改。</p></header>
 
-  <div class="cols">
-    <div class="card">
-      <h3>做什么</h3>
-      <ol class="tight">
-        <li>用共用检索块搜 8–10 篇候选，记标题即可。</li>
-        <li>每篇标类型（实证/综述/政策/评论）、国别、年份。</li>
-        <li>过三道门槛，任一不过就停。</li>
-      </ol>
-      <div class="copy"><button class="mini" data-copy="kwCore">复制</button>
+  <div class="card">
+    <h3>分工线</h3>
+    <p class="hint" style="margin-top:0">结果变量全部用 <b>body dissatisfaction</b>，变的只是「谁做了什么」。</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Lens</th><th>负责的行动者</th><th>核心词</th><th>禁用词（会撞车）</th></tr></thead>
+      <tbody>
+        <tr><td><b>Education</b></td><td>学校、老师、课程</td><td>school, curriculum, teacher, school-based program</td><td>algorithm, coping, content analysis</td></tr>
+        <tr><td><b>Technology</b></td><td>平台、产品、算法</td><td>algorithm, recommendation, filter, platform design</td><td>intervention, curriculum, coping</td></tr>
+        <tr><td><b>Psychology</b></td><td>个体内部心理过程</td><td>social comparison, internalization, self-esteem, coping</td><td>algorithm, curriculum, content analysis</td></tr>
+        <tr><td><b>Media</b></td><td>内容、传播、网红</td><td>content analysis, framing, representation, influencer</td><td>school, curriculum, intervention, <b>media literacy</b></td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="card">
+    <h3>共用块 · 原样带上</h3>
+    <div class="copy"><button class="mini" data-copy="kwCore">复制</button>
 <pre id="kwCore">("social media" OR "short video" OR Douyin OR Xiaohongshu)
 AND ("body image" OR "body dissatisfaction" OR "appearance anxiety")
 AND (China OR Chinese)
 AND (adolescen* OR teen* OR student*)</pre></div>
-      <p class="hint">0 条时按顺序降级：删 China → 删 lens → 两组分开搜。不要改词。</p>
-    </div>
-    <div class="card">
-      <h3>判定标准</h3>
-      <label class="chk"><input type="checkbox" data-p="recon1"><span>≥3 篇实证研究（有样本量与统计量）</span></label>
-      <label class="chk"><input type="checkbox" data-p="recon2"><span>≥4 个有组织的主张者公开争论</span></label>
-      <label class="chk"><input type="checkbox" data-p="recon3"><span>分歧是价值排序冲突（不是事实争议）</span></label>
-      <label class="chk"><input type="checkbox" data-p="recon4"><span>候选清单已列出 4 个主张者名称</span></label>
-      <label class="chk"><input type="checkbox" data-p="recon5"><span>已把 2 篇「可能反驳本组」的存起来</span></label>
-    </div>
+    <p class="hint">只在后面 AND 自己的 lens 块。改了就不在同一个话题上了。</p>
   </div>
 
-  <details class="card"><summary>5 个 lens 的检索块与各自的坑</summary><div id="lensCards" class="lens-grid"></div></details>
+  <div id="lensCards"></div>
+
+  <details class="card"><summary>三条通用规则</summary>
+    <ol class="tight">
+      <li><b>共用块一个字都不许改。</b>每人只在自己那段后面 AND lens 块。</li>
+      <li><b>每篇存 4 个信息</b>：国家 / 样本量 / 研究设计 / 结论数字。缺一项，这篇在 IRR 里写不出可信度评估，等于白找。</li>
+      <li><b>一撞车就换词，不要换题。</b>先看对方用什么词，再换成自己 lens 的核心词。</li>
+    </ol>
+  </details>
+
+  <div class="card">
+    <h3>命中数自查表</h3>
+    <p class="hint" style="margin-top:0">任何一格挂零先换检索词；连换两轮还挂零，就改问句范围（不是改话题）。</p>
+    <div id="hitCheck"></div>
+  </div>
 
   <div class="submit" data-step="recon"></div>
 </section>
 
-<!-- ========== RQ ========== -->
 <section id="s-rq">
   <header class="step-head"><span class="chip">STEP 3</span><h1>RQ 收窄</h1>
     <p class="goal">RQ 太宽不会扣一点点，而是把 Row 1 直接压到 Low。</p></header>
@@ -192,37 +202,62 @@ AND (adolescen* OR teen* OR student*)</pre></div>
 
 <!-- ========== 来源 ========== -->
 <section id="s-sources">
-  <header class="step-head"><span class="chip">STEP 5</span><h1>来源池</h1>
-    <p class="goal">目标全组 ≥16 条、每人 ≥4 条；重复登记会被指纹去重拦下。</p></header>
+  <header class="step-head"><span class="chip">STEP 5</span><h1>文章池</h1>
+    <p class="goal">每人 8 篇（Liu et al. 2025 打底不算配额）。全员可见，只有上传者本人能改或删。</p></header>
 
   <div class="cols">
     <div class="card">
-      <h3>登记</h3>
-      <div class="row"><div style="flex:2"><label class="f">作者 / 机构</label><input type="text" id="sAuth"/></div>
-        <div style="flex:1"><label class="f">年份</label><input type="number" id="sYear"/></div></div>
-      <label class="f">标题</label><input type="text" id="sTitle"/>
-      <div class="row"><div style="flex:1"><label class="f">Lens</label>
-        <select id="sLens"><option>Education</option><option>Technology</option><option>History</option><option>Psychology</option><option>Law</option><option>其他</option></select></div>
-        <div style="flex:1"><label class="f">类型</label>
-        <select id="sType"><option>同行评议实证研究</option><option>系统综述 / meta 分析</option><option>官方政策文件 / 统计数据</option>
-          <option>学术专著 / 史料研究</option><option>智库 / 行业协会报告</option><option>媒体报道</option><option>其他</option></select></div></div>
-      <div class="row"><div style="flex:1"><label class="f">证据等级</label>
-        <select id="sGrade"><option>强 · 直接支撑</option><option>中 · 间接支撑</option><option>弱 · 仅作背景</option><option>反证 · 反对本组</option></select></div>
-        <div style="flex:1"><label class="f">用途</label>
-        <select id="sUse"><option>引言 / 背景</option><option>视角 1</option><option>视角 2</option><option>视角 3</option><option>视角 4</option>
-          <option>综合段</option><option>反证段</option><option>结论</option></select></div></div>
-      <label class="f">可信度三句（谁 / 什么资质 / 利益倾向 / 只能支撑到哪）</label>
-      <textarea id="sCred"></textarea>
-      <button class="primary" id="saveSrc">登记</button><span class="small" id="srcHint"></span>
+      <h3 id="paperFormTitle">上传一篇</h3>
+      <div class="drop" id="drop-paper"><b>点击或拖入 PDF / DOCX / TXT</b><br>≤3.5MB；也可以只贴链接</div>
+      <input type="file" id="file-paper" class="hidden" accept=".pdf,.doc,.docx,.txt,.md">
+      <label class="f">标题 *</label><input type="text" id="pTitle"/>
+      <div class="row">
+        <div style="flex:2"><label class="f">作者 / 机构</label><input type="text" id="pAuth"/></div>
+        <div style="flex:1"><label class="f">年份</label><input type="text" id="pYear"/></div>
+      </div>
+      <div class="row">
+        <div style="flex:1"><label class="f">Lens</label>
+          <select id="pLens"><option>Education</option><option>Technology</option><option>Psychology</option><option>Media</option><option>其他</option></select></div>
+        <div style="flex:1"><label class="f">配额类别</label>
+          <select id="pQuota"><option>核心证据</option><option>元分析 / 综述</option><option>中国本土</option><option>可行性 / 实施</option><option>反证</option><option>其他</option></select></div>
+      </div>
+      <div class="row">
+        <div style="flex:1"><label class="f">国家</label><input type="text" id="pCountry" placeholder="China / US / 多国"/></div>
+        <div style="flex:1"><label class="f">样本量</label><input type="text" id="pSample" placeholder="605"/></div>
+      </div>
+      <label class="f">研究设计</label>
+      <input type="text" id="pDesign" placeholder="横断问卷 / 两波追踪 / RCT / 内容分析 / 元分析 / 政策文件"/>
+      <label class="f">结论数字（关键那一句）</label>
+      <input type="text" id="pFinding" placeholder="交叉滞后双向显著；性别差异 p=.23"/>
+      <label class="f">可信度三句（谁 / 资质 / 利益倾向 / 只能支撑到哪）</label>
+      <textarea id="pCred"></textarea>
+      <label class="f">链接（选了文件可不填）</label><input type="text" id="pUrl" placeholder="https://..."/>
+      <div class="row">
+        <button class="primary" id="savePaper">上传</button>
+        <button class="ghost hidden" id="cancelEditPaper">取消修改</button>
+        <span class="small" id="paperHint"></span>
+      </div>
     </div>
-    <div class="card"><h3>池子 <span class="pill" id="srcTotal">0</span></h3>
-      <div id="srcTable"></div><div id="srcBars" class="bars"></div></div>
+
+    <div class="card">
+      <h3>每人进度 <span class="pill" id="paperTotal">0</span></h3>
+      <div id="paperProgress"></div>
+      <h3 style="margin-top:14px">配额覆盖</h3>
+      <div id="quotaCover"></div>
+      <p class="hint">通过线：核心 ≥4 篇候选、含 1 篇元分析、中国本土 ≥3、可行性 ≥3、反证 ≥1。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="spread"><h3 style="margin:0">全部文章</h3>
+      <select id="paperFilter" style="max-width:200px"><option value="">全部 lens</option>
+        <option>Education</option><option>Technology</option><option>Psychology</option><option>Media</option><option>其他</option></select></div>
+    <div id="srcTable" style="margin-top:8px"></div>
   </div>
 
   <div class="submit" data-step="source"></div>
 </section>
 
-<!-- ========== IRR ========== -->
 <section id="s-irr">
   <header class="step-head"><span class="chip">STEP 6</span><h1>IRR 撰写</h1>
     <p class="goal">≤1200 词。先分配字数，再写句子。</p></header>

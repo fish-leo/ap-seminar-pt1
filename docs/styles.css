@@ -193,3 +193,11 @@ tbody tr:hover{background:#131b25}
 /* 隐藏 Netlify 右下角角标（官方开关在付费计划里，免费站可用这条覆盖） */
 #nl-badge-frame,
 iframe[title="Powered by Netlify"]{display:none!important}
+
+/* 检索卡与表格 */
+.blk{border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+.blk-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.blk-h b{font-size:12.5px;color:#cddcec}
+.scroll{overflow-x:auto}
+.scroll table{min-width:520px}
+.hitin{width:70px}

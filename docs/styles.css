@@ -201,3 +201,5 @@ iframe[title="Powered by Netlify"]{display:none!important}
 .scroll{overflow-x:auto}
 .scroll table{min-width:520px}
 .hitin{width:70px}
+
+.hbar span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

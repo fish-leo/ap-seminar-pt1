@@ -650,7 +650,8 @@ function renderPapers(){
     const n = counts[m.id] || 0;
     const pct = Math.min(100, n / TARGET * 100);
     const color = n >= TARGET ? "linear-gradient(90deg,#34d399,#4ea1ff)" : "linear-gradient(90deg,#4ea1ff,#7c5cff)";
-    return `<div class="hbar"><span>${esc(m.name)}${m.lens ? " · " + esc(m.lens.replace(/\\s*\\S*$/, "")) : ""}</span>
+    const shortLens = m.lens ? m.lens.split(/\s+/)[0] : "";
+    return `<div class="hbar"><span>${esc(m.name)}${shortLens ? " · " + esc(shortLens) : ""}</span>
       <span class="bar"><i style="width:${pct}%;background:${color}"></i></span><span>${n}/${TARGET}</span></div>`;
   }).join("");
   $("#paperProgress").innerHTML = rows || `<p class="hint">还没有成员。</p>`;
